@@ -1,0 +1,62 @@
+{extends file="admin-layout.tpl"}
+
+{block name="after-bootstrap-css"}
+
+{/block}
+
+{block name="no-return-functions"}
+    {$admin_current_location = 'module'}
+{/block}
+
+{block name="page-title"}{intl l='Payment condition module configuration' d='paymentcondition.bo.default'}{/block}
+
+{block name="check-resource"}admin.module{/block}
+{block name="check-access"}view{/block}
+{block name="check-module"}paymentcondition{/block}
+
+{block name="main-content"}
+  <div id="payment_condition_container">
+      <div id="payment_condition_delivery">
+
+      </div>
+
+      {loop name="customer_family_enabled" type="module" code="CustomerFamily" active="1"}
+          <div id="payment_condition_customer_family">
+
+          </div>
+      {/loop}
+      {elseloop rel="customer_family_enabled"}
+          <div class="alert alert-info">
+              {intl l="Install and activate 'CustomerFamily' module to get configuration options." d='paymentcondition.bo.default'}
+          </div>
+      {/elseloop}
+
+      <div id="payment_condition_area">
+
+      </div>
+  </div>
+{/block}
+
+{block name="javascript-initialization"}
+    {javascripts file='assets/js/bootstrap-switch/bootstrap-switch.js'}
+      <script src='{$asset_url}'></script>
+    {/javascripts}
+
+  <script>
+      $(function () {
+          $.get('{url path="/admin/module/paymentcondition/delivery"}').done(function (data) {
+              $('#payment_condition_delivery').append(data);
+          });
+
+          if ( $( "#payment_condition_customer_family" ).length ) {
+              $.get('{url path="/admin/module/paymentcondition/customerfamily"}').done(function (data) {
+                  $('#payment_condition_customer_family').append(data);
+              });
+          }
+
+          $.get('{url path="/admin/module/paymentcondition/area"}').done(function (data) {
+              $('#payment_condition_area').append(data);
+          });
+      });
+  </script>
+{/block}

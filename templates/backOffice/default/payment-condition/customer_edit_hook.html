@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col-md-12 general-block-decorator">
+        <div class="row">
+            <div class="col-md-12 title title-without-tabs">{intl l="Payment conditions for this customer" d="paymentcondition.bo.default"}</div>
+            <div class="col-md-12">
+                <div class="col-md-12">
+                    {if null === $paymentCustomerCondition || 0 === $paymentCustomerCondition->getModuleRestrictionActive()}
+                        <div class="alert alert-info">
+                            {intl l="Payment restrictions is not activated for this customer" d="paymentcondition.bo.default"}
+                        </div>
+                    {else}
+                        <h3>
+                            {intl l="Allowed payments :" d="paymentcondition.bo.default"}
+                        </h3>
+                        <ul>
+                            {foreach from=$allowedModules item=allowedModule}
+                                <li>{$allowedModule->getTitle()} ({$allowedModule->getCode()})</li>
+                            {/foreach}
+                        </ul>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

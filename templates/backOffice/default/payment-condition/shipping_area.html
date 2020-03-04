@@ -1,0 +1,57 @@
+
+<div class="general-block-decorator">
+    <h4>{intl l="Condition by chosen shipping area"}</h4>
+    <div class="table-responsive">
+        <table class="table table-striped table-condensed table-left-aligned">
+            <thead>
+            <td></td>
+            {foreach from=$paymentModules item=paymentModule}
+            <td>{$paymentModule->getCode()}</td>
+            {/foreach}
+            </thead>
+            {foreach from=$shippingAreas item=shippingArea}
+            <tr>
+                <td>{$shippingArea->getName()}</td>
+                {foreach from=$paymentModules item=paymentModule}
+                <td>
+                    <div class="switch-small area_condition_switch" data-area="{$shippingArea->getId()}" data-payment="{$paymentModule->getId()}"
+                         data-category="area" data-on="success" data-off="danger"
+                         data-on-label="<i class='glyphicon glyphicon-ok'></i>"
+                         data-off-label="<i class='glyphicon glyphicon-remove'></i>">
+                        <input name="{$name}" type="checkbox" {if $areaPaymentCondition[$paymentModule->getId()][$shippingArea->getId()]}checked{/if}/>
+                    </div>
+                </td>
+                {/foreach}
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        var areaConditionSwitch = $(".area_condition_switch");
+
+        areaConditionSwitch.bootstrapSwitch();
+
+        areaConditionSwitch.on("switch-change", function(e, data) {
+            var checkbox = $(this);
+            var isChecked = data.value;
+            var areaId = $(this).data('area');
+            var paymentId = $(this).data('payment');
+            var url = "{url path="/admin/module/paymentcondition/area"}";
+            {literal}
+            $.post(url, {
+                areaId : areaId,
+                paymentId : paymentId,
+                isValid : isChecked
+            }).fail(function(data) {
+                console.log(data.responseText);
+                checkbox.bootstrapSwitch('toggleState', true);
+            });
+            {/literal}
+        });
+
+    });
+</script>

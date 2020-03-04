@@ -1,0 +1,57 @@
+
+<div class="general-block-decorator">
+    <h4>{intl l="Condition by chosen delivery module"}</h4>
+    <div class="table-responsive">
+        <table class="table table-striped table-condensed table-left-aligned">
+            <thead>
+                <td></td>
+                {foreach from=$paymentModules item=paymentModule}
+                    <td>{$paymentModule->getCode()}</td>
+                {/foreach}
+            </thead>
+            {foreach from=$deliveryModules item=deliveryModule}
+                <tr>
+                    <td>{$deliveryModule->getCode()}</td>
+                    {foreach from=$paymentModules item=paymentModule}
+                        <td>
+                            <div class="switch-small delivery_condition_switch" data-delivery="{$deliveryModule->getId()}" data-payment="{$paymentModule->getId()}"
+                                 data-category="delivery" data-on="success" data-off="danger"
+                                 data-on-label="<i class='glyphicon glyphicon-ok'></i>"
+                                 data-off-label="<i class='glyphicon glyphicon-remove'></i>">
+                                <input name="{$name}" type="checkbox" {if $paymentDeliveryCondition[$paymentModule->getId()][$deliveryModule->getId()]}checked{/if}/>
+                            </div>
+                        </td>
+                    {/foreach}
+                </tr>
+            {/foreach}
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        var deliveryConditionSwitch = $(".delivery_condition_switch");
+
+        deliveryConditionSwitch.bootstrapSwitch();
+
+        deliveryConditionSwitch.on("switch-change", function(e, data) {
+            var checkbox = $(this);
+            var isChecked = data.value;
+            var deliveryId = $(this).data('delivery');
+            var paymentId = $(this).data('payment');
+            var url = "{url path="/admin/module/paymentcondition/delivery"}";
+            {literal}
+                $.post(url, {
+                    deliveryId : deliveryId,
+                    paymentId : paymentId,
+                    isValid : isChecked
+                }).fail(function(data) {
+                    console.log(data.responseText);
+                    checkbox.bootstrapSwitch('toggleState', true);
+                });
+            {/literal}
+        });
+
+    });
+</script>

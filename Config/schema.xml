@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database defaultIdMethod="native" name="thelia"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../vendor/propel/propel/resources/xsd/database.xsd" >
+
+    <table name="payment_delivery_condition" namespace="PaymentCondition\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="payment_module_id" type="INTEGER" required="true"/>
+        <column name="delivery_module_id" type="INTEGER" required="true"/>
+        <column name="is_valid" type="TINYINT"/>
+
+        <foreign-key foreignTable="module" name="fk_payment_delivery_condition_payment_module_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="payment_module_id" />
+        </foreign-key>
+
+        <foreign-key foreignTable="module" name="fk_payment_delivery_condition_delivery_module_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="delivery_module_id" />
+        </foreign-key>
+    </table>
+
+    <table name="payment_customer_family_condition" namespace="PaymentCondition\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="payment_module_id" type="INTEGER" required="true"/>
+        <column name="customer_family_id" type="INTEGER" required="true"/>
+        <column name="is_valid" type="TINYINT"/>
+
+        <foreign-key foreignTable="module" name="fk_payment_customer_family_condition_payment_module_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="payment_module_id" />
+        </foreign-key>
+    </table>
+
+    <table name="payment_area_condition" namespace="PaymentCondition\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="payment_module_id" type="INTEGER" required="true"/>
+        <column name="area_id" type="INTEGER" required="true"/>
+        <column name="is_valid" type="TINYINT"/>
+
+        <foreign-key foreignTable="module" name="fk_payment_area_condition_payment_module_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="payment_module_id" />
+        </foreign-key>
+
+        <foreign-key foreignTable="area" name="fk_payment_area_condition_area_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="area_id" />
+        </foreign-key>
+    </table>
+
+    <table name="payment_customer_condition" namespace="PaymentCondition\Model">
+        <column name="customer_id"  primaryKey="true" type="INTEGER" required="true"/>
+        <column name="module_restriction_active" type="TINYINT"/>
+
+        <foreign-key foreignTable="customer" name="fk_payment_customer_condition_customer_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="customer_id" />
+        </foreign-key>
+    </table>
+
+    <table name="payment_customer_module_condition" namespace="PaymentCondition\Model">
+        <column name="payment_module_id" primaryKey="true" type="INTEGER" required="true"/>
+        <column name="customer_id" primaryKey="true" type="INTEGER" required="true"/>
+        <column name="is_valid" type="TINYINT"/>
+
+        <foreign-key foreignTable="customer" name="fk_payment_customer_module_condition_customer_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="customer_id" />
+        </foreign-key>
+
+        <foreign-key foreignTable="module" name="fk_payment_customer_module_condition_payment_module_id" onDelete="CASCADE" onUpdate="RESTRICT">
+            <reference foreign="id" local="payment_module_id" />
+        </foreign-key>
+    </table>
+
+    <external-schema filename="local/config/schema.xml" referenceOnly="true" />
+</database>
