@@ -18,7 +18,7 @@
                                  data-category="delivery" data-on="success" data-off="danger"
                                  data-on-label="<i class='glyphicon glyphicon-ok'></i>"
                                  data-off-label="<i class='glyphicon glyphicon-remove'></i>">
-                                <input name="{$name}" type="checkbox" {if $paymentDeliveryCondition[$paymentModule->getId()][$deliveryModule->getId()]}checked{/if}/>
+                                <input name="{$name|default:null}" type="checkbox" {if $paymentDeliveryCondition[$paymentModule->getId()][$deliveryModule->getId()]|default:null}checked{/if}/>
                             </div>
                         </td>
                     {/foreach}
