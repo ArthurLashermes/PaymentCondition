@@ -9,7 +9,7 @@ Allow to restrict payment modules by customer, delivery module, customer family 
 Add it in your main thelia composer.json file
 
 ```
-composer require thelia/payment-condition-module:~1.0
+composer require thelia/payment-condition-module ~2.0.0
 ```
 
 ## Usage
