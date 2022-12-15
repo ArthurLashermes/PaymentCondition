@@ -4,12 +4,20 @@ namespace PaymentCondition\Controller;
 
 use PaymentCondition\Model\PaymentDeliveryCondition;
 use PaymentCondition\Model\PaymentDeliveryConditionQuery;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\JsonResponse;
 use Thelia\Model\ModuleQuery;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/admin/module/paymentcondition/delivery", name="payment_condition_delivery_condition_")
+ */
 class DeliveryConditionController extends BaseAdminController
 {
+    /**
+     * @Route("", name="view", methods="GET")
+     */
     public function viewAction()
     {
         $paymentDeliveryConditionArray = [];
@@ -37,16 +45,19 @@ class DeliveryConditionController extends BaseAdminController
         ]);
     }
 
-    public function saveAction()
+    /**
+     * @Route("", name="save", methods="POST")
+     */
+    public function saveAction(RequestStack $requestStack)
     {
-        $request = $this->getRequest();
+        $request = $requestStack->getCurrentRequest();
 
         try {
             $paymentId = $request->request->get("paymentId");
             $deliveryId = $request->request->get("deliveryId");
             $isValid = $request->request->get("isValid") == "true" ? 1 : 0;
 
-            $paymentDelivery = PaymentDeliveryConditionQuery::create()
+            $paymentDelivery = PaymentDeliveryConditionQuery::create(   )
                 ->filterByPaymentModuleId($paymentId)
                 ->filterByDeliveryModuleId($deliveryId)
                 ->findOneOrCreate();
@@ -55,8 +66,8 @@ class DeliveryConditionController extends BaseAdminController
                 ->save();
 
         } catch (\Exception $e) {
-            return JsonResponse::create($e->getMessage(), 500);
+            return new JsonResponse($e->getMessage(), 500);
         }
-        return JsonResponse::create("Success");
+        return new JsonResponse("Success");
     }
 }

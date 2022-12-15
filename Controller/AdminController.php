@@ -2,14 +2,17 @@
 
 namespace PaymentCondition\Controller;
 
-use PaymentCondition\Model\PaymentDeliveryCondition;
-use PaymentCondition\Model\PaymentDeliveryConditionQuery;
 use Thelia\Controller\Admin\BaseAdminController;
-use Thelia\Core\HttpFoundation\JsonResponse;
-use Thelia\Model\ModuleQuery;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/admin/module/PaymentCondition", name="payment_condition_admin_config_")
+ */
 class AdminController extends BaseAdminController
 {
+    /**
+     * @Route("", name="view")
+     */
     public function viewAction()
     {
         return $this->render('payment-condition/configuration');

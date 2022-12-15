@@ -6,13 +6,21 @@ use CustomerFamily\Model\CustomerFamily;
 use CustomerFamily\Model\CustomerFamilyQuery;
 use PaymentCondition\Model\PaymentCustomerFamilyCondition;
 use PaymentCondition\Model\PaymentCustomerFamilyConditionQuery;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\JsonResponse;
 use Thelia\Model\Module;
 use Thelia\Model\ModuleQuery;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/admin/module/paymentcondition/customerfamily", name="payment_condition_customer_family_condition_")
+ */
 class CustomerFamilyConditionController extends BaseAdminController
 {
+    /**
+     * @Route("", name="view", methods="GET")
+     */
     public function viewAction()
     {
         $customerFamilyPaymentsModules = [];
@@ -53,9 +61,12 @@ class CustomerFamilyConditionController extends BaseAdminController
         ]);
     }
 
-    public function saveAction()
+    /**
+     * @Route("", name="save", methods="POST")
+     */
+    public function saveAction(RequestStack $requestStack)
     {
-        $request = $this->getRequest();
+        $request = $requestStack->getCurrentRequest();
 
         try {
             $moduleId = $request->request->get("moduleId");
@@ -71,8 +82,8 @@ class CustomerFamilyConditionController extends BaseAdminController
                 ->save();
 
         } catch (\Exception $e) {
-            return JsonResponse::create($e->getMessage(), 500);
+            return new JsonResponse($e->getMessage(), 500);
         }
-        return JsonResponse::create("Success");
+        return new JsonResponse("Success");
     }
 }

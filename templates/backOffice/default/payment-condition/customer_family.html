@@ -22,7 +22,7 @@
                        data-category="payment" data-on="success" data-off="danger"
                        data-on-label="<i class='glyphicon glyphicon-ok'></i>"
                        data-off-label="<i class='glyphicon glyphicon-remove'></i>">
-                    <input name="{$name}" type="checkbox" {if $is_valid}checked{/if}/>
+                    <input name="{$name|default:null}" type="checkbox" {if $is_valid}checked{/if}/>
                   </div>
                 </td>
               {/foreach}

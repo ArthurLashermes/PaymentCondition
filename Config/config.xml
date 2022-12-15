@@ -22,14 +22,10 @@
         -->
     </commands>
 
-    <services>
-        <service id="payment_condition.payment.loop.extends" class="PaymentCondition\EventListeners\PaymentLoopExtend" scope="request">
-            <argument type="service" id="request_stack"/>
-            <tag name="kernel.event_subscriber" />
-        </service>
-    </services>
-
     <hooks>
+        <hook id="payment_condition.hook" class="PaymentCondition\Hook\ConfigurationHook">
+            <tag name="hook.event_listener" event="module.configuration" type="back" method="onModuleConfiguration" />
+        </hook>
         <hook id="payment_condition.customer.edit" class="PaymentCondition\Hook\CustomerEditHook">
             <tag name="hook.event_listener" event="customer.edit" type="back" method="onCustomerEdit" />
         </hook>

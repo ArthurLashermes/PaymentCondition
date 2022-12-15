@@ -4,13 +4,21 @@ namespace PaymentCondition\Controller;
 
 use PaymentCondition\Model\PaymentAreaCondition;
 use PaymentCondition\Model\PaymentAreaConditionQuery;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\JsonResponse;
 use Thelia\Model\AreaQuery;
 use Thelia\Model\ModuleQuery;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/admin/module/paymentcondition/area", name="payment_condition_area_condition_")
+ */
 class AreaConditionController extends BaseAdminController
 {
+    /**
+     * @Route("", name="view", methods="GET")
+     */
     public function viewAction()
     {
         $areaPaymentConditionArray = [];
@@ -37,9 +45,12 @@ class AreaConditionController extends BaseAdminController
         ]);
     }
 
-    public function saveAction()
+    /**
+     * @Route("", name="save", methods="POST")
+     */
+    public function saveAction(RequestStack $requestStack)
     {
-        $request = $this->getRequest();
+        $request = $requestStack->getCurrentRequest();
 
         try {
             $paymentId = $request->request->get("paymentId");
@@ -55,8 +66,8 @@ class AreaConditionController extends BaseAdminController
                 ->save();
 
         } catch (\Exception $e) {
-            return JsonResponse::create($e->getMessage(), 500);
+            return new JsonResponse($e->getMessage(), 500);
         }
-        return JsonResponse::create("Success");
+        return new JsonResponse("Success");
     }
 }
