@@ -12,7 +12,7 @@ use Thelia\Model\ModuleQuery;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/module/paymentcondition/area", name="area_condition")
+ * @Route("/admin/module/paymentcondition/area", name="payment_condition_area_condition_")
  */
 class AreaConditionController extends BaseAdminController
 {

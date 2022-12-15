@@ -11,7 +11,7 @@ use Thelia\Model\ModuleQuery;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/module/paymentcondition/delivery", name="delivery_condition")
+ * @Route("/admin/module/paymentcondition/delivery", name="payment_condition_delivery_condition_")
  */
 class DeliveryConditionController extends BaseAdminController
 {
