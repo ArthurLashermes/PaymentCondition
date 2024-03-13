@@ -3,6 +3,7 @@
 namespace PaymentCondition\Service;
 
 use CustomerFamily\Model\CustomerCustomerFamilyQuery;
+use CustomerFamily\Model\CustomerFamilyQuery;
 use PaymentCondition\Model\Map\PaymentAreaConditionTableMap;
 use PaymentCondition\Model\Map\PaymentCustomerFamilyConditionTableMap;
 use PaymentCondition\Model\Map\PaymentCustomerModuleConditionTableMap;
@@ -82,6 +83,7 @@ class PaymentConditionService
             ->filterByIsValid(1)
             ->findOne();
 
+
         // If no condition valid set, don't filter
         if (null === $deliveryCustomerFamilyCondition) {
             return;
@@ -90,8 +92,12 @@ class PaymentConditionService
         $customerCustomerFamily = CustomerCustomerFamilyQuery::create()
             ->findOneByCustomerId($customer->getId());
 
+        $customerFamily = $customerCustomerFamily?->getCustomerFamily() ??
+            CustomerFamilyQuery::create()->filterByIsDefault(true)->findOne();
+
+
         // If no customer family set, disable all modules
-        if (null === $customerCustomerFamily) {
+        if (null === $customerFamily) {
             $query->filterById(-1);
             return;
         }
@@ -108,7 +114,7 @@ class PaymentConditionService
 
         $join->setJoinType(Criteria::JOIN);
         $query->addJoinObject($join, 'payment_customer_family_condition_join')
-            ->addJoinCondition('payment_customer_family_condition_join', PaymentCustomerFamilyConditionTableMap::COL_CUSTOMER_FAMILY_ID.' = '.$customerCustomerFamily->getCustomerFamilyId())
+            ->addJoinCondition('payment_customer_family_condition_join', PaymentCustomerFamilyConditionTableMap::COL_CUSTOMER_FAMILY_ID.' = '.$customerFamily->getId())
             ->addJoinCondition('payment_customer_family_condition_join', PaymentCustomerFamilyConditionTableMap::COL_IS_VALID . ' = 1');
     }
 

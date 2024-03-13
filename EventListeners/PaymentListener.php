@@ -35,11 +35,14 @@ class PaymentListener implements EventSubscriberInterface
             $this->paymentConditionService->filterByCustomerFamilyCondition($moduleQuery);
         }
 
+
         $this->paymentConditionService->filterByAreaCondition($moduleQuery);
         $this->paymentConditionService->filterByDeliveryCondition($moduleQuery);
         $this->paymentConditionService->filterByCustomerCondition($moduleQuery);
 
         $module = $moduleQuery->findOne();
+
+
         if (empty($module)) {
             $event->setValidModule(false);
         }
