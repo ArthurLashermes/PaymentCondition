@@ -9,6 +9,7 @@ use PaymentCondition\Model\PaymentCustomerFamilyConditionQuery;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\HttpFoundation\JsonResponse;
+use Thelia\Model\LangQuery;
 use Thelia\Model\Module;
 use Thelia\Model\ModuleQuery;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,6 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CustomerFamilyConditionController extends BaseAdminController
 {
+    public function __construct(private RequestStack $requestStack)
+    {
+    }
+
     /**
      * @Route("", name="view", methods="GET")
      */
@@ -33,6 +38,10 @@ class CustomerFamilyConditionController extends BaseAdminController
         $customerFamilies = CustomerFamilyQuery::create()
             ->find();
 
+        $currentLocale = $this->requestStack->getSession()->getAdminEditionLang()->getLocale();
+        if (!$currentLocale){
+            $currentLocale = LangQuery::create()->filterByByDefault(true)->findOne()->getLocale();
+        }
         /** @var Module $paymentModule */
         foreach ($paymentModules as $paymentModule) {
             $moduleCodes[$paymentModule->getId()] = $paymentModule->getCode();
@@ -40,7 +49,7 @@ class CustomerFamilyConditionController extends BaseAdminController
             /** @var CustomerFamily $customerFamily */
             foreach ($customerFamilies as $customerFamily) {
                 $customerFamilyPaymentsModules[$customerFamily->getId()][$paymentModule->getId()] = 0;
-                $familyCodes[$customerFamily->getId()] = $customerFamily->getCode();
+                $familyCodes[$customerFamily->getId()] = $customerFamily->getCode(). ' ('.$customerFamily->setLocale($currentLocale)->getTitle().')';
             }
         }
 
